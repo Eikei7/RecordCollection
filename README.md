@@ -1,16 +1,33 @@
-# React + Vite
+# My Record Collection
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A sleek, browser-based music collection manager built with **React** and the **MusicBrainz API**. Browse millions of albums, manage your personal collection, and keep your data safe with local storage and export/import functionality.
 
-Currently, two official plugins are available:
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
+![API](https://img.shields.io/badge/MusicBrainz-API-orange)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- **Live Music Search:** Search for any artist and fetch their entire discography (Albums, EPs, Singles) directly from the MusicBrainz database.
+- **High-Quality Cover Art:** Automatically fetches album covers via the Cover Art Archive.
+- **Smart Collection Management:**
+  - Add/remove albums with a single click.
+  - Persistent storage: Your collection is saved locally in your browser.
+  - View modes: Switch between a visual **Grid** and a clean **List** view.
+- **Advanced Sorting & Filtering:**
+  - Sort by release year (newest/oldest) or title (A-Z/Z-A).
+  - Real-time filtering by artist name.
+- **Data Portability:**
+  - **Export:** Save your entire collection as a timestamped `.json` file.
+  - **Import:** Restore your collection or move it to another browser easily.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Getting Started
 
-## Expanding the ESLint configuration
+### Prerequisites
+- [Node.js](https://nodejs.org/) (v14 or later recommended)
+- npm or yarn
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone [https://github.com/your-username/record-shelf.git](https://github.com/your-username/record-shelf.git)
