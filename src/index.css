@@ -1,0 +1,330 @@
+/* Importera alla tre font-familjer */
+@import url("https://fonts.googleapis.com/css?family=Oswald:200,300,regular,500,600,700");
+@import url("https://fonts.googleapis.com/css?family=Lilex:100,200,300,regular,500,600,700,100italic,200italic,300italic,italic,500italic,600italic,700italic");
+@import url("https://fonts.googleapis.com/css?family=Geom:300,regular,500,600,700,800,900,300italic,italic,500italic,600italic,700italic,800italic,900italic");
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f8f8f8;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  font-family: Oswald;
+  margin-bottom: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: .75rem;
+  color: #444;
+  font-family: Geom;
+}
+
+.description {
+  text-align: center;
+  font-family: Geom;
+}
+
+/* Ny klass från din deployade kod */
+.description-build {
+  text-align: center;
+  color: #757575;
+  font-family: Geom;
+}
+
+.search-section {
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px #0000001a;
+  margin-bottom: 2rem;
+}
+
+.search-form {
+  display: flex;
+  gap: .5rem;
+}
+
+.search-input {
+  border: 1px solid #ccc;
+  padding: .5rem;
+  border-radius: 4px;
+  flex-grow: 1;
+}
+
+/* Knappar */
+.btn {
+  font-family: Geom, sans-serif;
+  font-weight: 400;
+  font-size: 0.875rem;
+  padding: .5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color .2s;
+  white-space: nowrap;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.btn-primary { background-color: #4caf50; color: #fff; border: none; }
+.btn-primary:hover { background-color: #45a049; }
+
+.btn-add {
+  background-color: #3b82f6;
+  color: #fff;
+  border: none;
+  padding: .25rem .75rem;
+  font-size: .875rem;
+}
+
+.btn-add:hover { background-color: #2563eb; }
+
+.btn-added {
+  background-color: #a3a3a3;
+  color: #fff;
+  border: none;
+  padding: .25rem .75rem;
+  font-size: .875rem;
+  font-weight: 700;
+  border-radius: 4px;
+  cursor: not-allowed;
+  opacity: .8;
+}
+
+/* Grids och Responsivitet */
+.results-grid, .collection-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media(min-width: 768px) {
+  .results-grid { grid-template-columns: repeat(3, 1fr); }
+  .collection-grid { grid-template-columns: repeat(5, 1fr); }
+}
+
+@media(min-width: 1024px) {
+  .collection-grid { grid-template-columns: repeat(6, 1fr); }
+}
+
+.album-card-cover-focus {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background-color: #fff;
+  box-shadow: 0 1px 2px #0000000d;
+  padding: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.cover-focus-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.cover-focus-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cover-focus-details {
+  padding: .5rem;
+  min-height: 50px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.cover-focus-details .album-title {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+  font-family: Geom;
+}
+
+.cover-focus-details .album-meta {
+  font-size: .8rem;
+  color: #6b7280;
+  font-family: Geom;
+}
+
+.btn-remove-overlay {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 10;
+  background-color: transparent;
+  color: #fff;
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color .2s, transform .2s;
+}
+
+/* Sökresultat-kort (.card) */
+.card {
+  border: 1px solid #eee;
+  padding: .75rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  background-color: #fff;
+  box-shadow: 0 1px 2px #0000000d;
+}
+
+.cover-wrapper { width: 128px; height: 128px; flex-shrink: 0; }
+.cover-image { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; }
+
+.no-cover {
+  width: 100%;
+  height: 100%;
+  background-color: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .75rem;
+  color: #6b7280;
+  border-radius: 4px;
+}
+
+.album-details { flex-grow: 1; }
+.album-details p:first-child { font-weight: 700; }
+.album-details p:last-child { font-size: .875rem; color: #6b7280; }
+
+/* Kontrollpanel */
+.collection-controls-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #ddd;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+}
+
+.control-group { display: flex; align-items: center; gap: .5rem; }
+.control-label { font-weight: 600; color: #444; font-size: .875rem; }
+.control-select, .control-input {
+  padding: .5rem .75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .875rem;
+  background-color: #fff;
+}
+
+.status-text { font-size: .875rem; color: #6b7280; margin: 0 0 0 auto; }
+
+/* Listvy-specialare */
+.album-list-view { display: flex; flex-direction: column; gap: .5rem; }
+.album-list-view .album-card-cover-focus {
+  display: flex;
+  align-items: center;
+  padding: .5rem;
+  flex-direction: row;
+  min-height: unset;
+  box-shadow: none;
+}
+
+.album-list-view .cover-focus-wrapper { width: 50px; height: 50px; flex-shrink: 0; }
+.album-list-view .cover-focus-details {
+  flex-grow: 1;
+  margin-left: 1rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  -webkit-box-orient: unset;
+}
+
+.album-list-view .cover-focus-details .album-title { font-family: Geom; }
+
+.album-list-view .btn-remove-overlay {
+  position: static;
+  margin-left: auto;
+  color: #333;
+  width: 20px;
+  height: 20px;
+}
+
+/* Export/Import */
+.export-import-controls-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background-color: #fcfcfc;
+}
+
+.btn-export { background-color: #fbbf24; color: #1f2937; border: none; padding: .5rem 1rem; font-weight: 600; }
+.btn-import { background-color: #10b981; color: #fff; border: none; padding: .5rem 1rem; font-weight: 600; }
+
+.credits { text-align: center; margin-top: 5rem; color: #555; font-family: Geom; }
+
+.view-mode-controls { display: flex; align-items: center; gap: .5rem; margin-left: 1rem; }
+.btn-view-mode {
+  background-color: #e5e7eb;
+  color: #4b5563;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color .2s, color .2s;
+}
+.btn-view-mode.active { background-color: #3b82f6; color: #fff; }
+
+/* Mobil-mediaqueries (640px) */
+@media(max-width: 640px) {
+  .collection-controls-bar { flex-direction: column; align-items: flex-start; gap: .75rem; padding: .75rem; }
+  .control-group { width: 100%; justify-content: space-between; }
+  .control-select, .control-input { flex-grow: 1; max-width: 60%; }
+  .status-text { order: 10; margin-left: 0; width: 100%; border-top: 1px solid #e0e0e0; padding-top: .5rem; }
+  .view-mode-controls { width: 100%; border-top: 1px solid #e0e0e0; padding-top: .5rem; margin-left: 0; }
+  
+  /* Specifik mobil-styling för sökresultatskorten */
+  .card { flex-direction: column; align-items: center; padding: 1rem; }
+  .album-details { width: 100%; text-align: center; }
+  .btn-add, .btn-added { width: 50%; margin-top: .75rem; }
+}
