@@ -1,6 +1,11 @@
 import React from 'react';
+import SpineView from './SpineView';
 
 export default function CollectionList({ collection, onRemove, viewMode }) {
+  if (viewMode === 'spine') {
+    return <SpineView collection={collection} onRemove={onRemove} />;
+  }
+
   if (collection.length === 0) return <p className="description">Collection is empty.</p>;
 
   const listClass = viewMode === 'list' ? 'album-list-view' : 'album-grid-view';

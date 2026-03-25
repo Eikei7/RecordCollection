@@ -40,6 +40,13 @@ export default function CollectionControls({
         <button onClick={() => setViewMode('list')} className={`btn-view-mode ${viewMode === 'list' ? 'active' : ''}`}>
           <FontAwesomeIcon icon="list" />
         </button>
+        <button onClick={() => setViewMode('spine')} className={`btn-view-mode ${viewMode === 'spine' ? 'active' : ''}`}>
+          <img 
+            src={viewMode === 'spine' ? '/src/assets/shelf-white.png' : '/src/assets/shelf.png'} 
+            alt="Spine view" 
+            style={{ width: '27px', height: '27px' }} 
+          />
+        </button>
       </div>
 
       <p className="status-text">Showing {currentCount} of {totalCount} albums</p>
