@@ -2,13 +2,20 @@ import React from 'react';
 
 export default function ExportImportControls({ collection, setCollection }) {
   const exportData = () => {
+    const today = new Date().toISOString().split('T')[0];
+    
     const dataStr = JSON.stringify(collection, null, 2);
     const blob = new Blob([dataStr], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
+    
     link.href = url;
-    link.download = 'my_collection.json';
+    
+    link.download = `my-record-collection-${today}.json`;
+    
     link.click();
+    
+    URL.revokeObjectURL(url);
   };
 
   const importData = (e) => {
@@ -31,19 +38,19 @@ export default function ExportImportControls({ collection, setCollection }) {
 
   return (
     <div className="export-import-controls-bar">
-  <button onClick={exportData} className="btn btn-export">
-    Export collection
-  </button>
+      <button onClick={exportData} className="btn btn-export">
+        Export collection
+      </button>
 
-  <label className="btn btn-import">
-    Import collection
-    <input 
-      type="file" 
-      accept=".json" 
-      onChange={importData} 
-      style={{ display: 'none' }} 
-    />
-  </label>
-</div>
+      <label className="btn btn-import">
+        Import collection
+        <input 
+          type="file" 
+          accept=".json" 
+          onChange={importData} 
+          style={{ display: 'none' }} 
+        />
+      </label>
+    </div>
   );
 }

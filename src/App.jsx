@@ -99,17 +99,15 @@ export default function App() {
       if (sortBy === 'year_desc') return b.release_year - a.release_year;
       if (sortBy === 'year_asc') return a.release_year - b.release_year;
       
-      // Sortering för Titel A-Z
       if (sortBy === 'title_asc') {
         return a.title.localeCompare(b.title);
       }
       
-      // Sortering för Titel Z-A (Här vänder vi på ordningen)
       if (sortBy === 'title_desc') {
         return b.title.localeCompare(a.title);
       }
 
-      return 0; // Standardfall om inget matchar
+      return 0;
     });
 
   return (
@@ -120,7 +118,6 @@ export default function App() {
       <p className="description-build">Built using React and <a href="https://musicbrainz.org/doc/Development/XML_Web_Service/Version_2" target="_blank" rel="noopener noreferrer">MusicBrainz API</a>.</p>
       
       <section className="search-section">
-        {/* <h2 className="section-title">Add New Albums</h2> */}
         <Search onSearch={handleSearch} isLoading={isLoading} />
         {error && <p style={{color: 'red', textAlign: 'center'}}>{error}</p>}
         {(searchResults.length > 0 || error) && (
