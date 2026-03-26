@@ -42,12 +42,10 @@ function SpineItem({ album, onClick, bgColor }) {
 }
 
 function SpineModal({ album, onClose, onRemove, bgColor }) {
-  // Close on backdrop click
   const handleBackdrop = (e) => {
     if (e.target === e.currentTarget) onClose();
   };
 
-  // Close on Escape
   useEffect(() => {
     const handler = (e) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', handler);

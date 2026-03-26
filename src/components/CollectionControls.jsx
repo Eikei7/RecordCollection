@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import shelfIcon from '../assets/shelf.png';
+import shelfIconWhite from '../assets/shelf-white.png';
 
 export default function CollectionControls({ 
   sortBy, setSortBy, filterArtist, setFilterArtist, totalCount, currentCount, viewMode, setViewMode 
@@ -35,14 +37,14 @@ export default function CollectionControls({
       <div className="view-mode-controls">
         <label className="control-label">View:</label>
         <button onClick={() => setViewMode('grid')} className={`btn-view-mode ${viewMode === 'grid' ? 'active' : ''}`}>
-          <FontAwesomeIcon icon="th-large" />
+          <FontAwesomeIcon icon="th-large" style={{ width: '21px', height: '21px' }} />
         </button>
         <button onClick={() => setViewMode('list')} className={`btn-view-mode ${viewMode === 'list' ? 'active' : ''}`}>
-          <FontAwesomeIcon icon="list" />
+          <FontAwesomeIcon icon="list" style={{ width: '21px', height: '21px' }} />
         </button>
         <button onClick={() => setViewMode('spine')} className={`btn-view-mode ${viewMode === 'spine' ? 'active' : ''}`}>
           <img 
-            src={viewMode === 'spine' ? '/src/assets/shelf-white.png' : '/src/assets/shelf.png'} 
+            src={viewMode === 'spine' ? shelfIconWhite : shelfIcon} 
             alt="Spine view" 
             style={{ width: '27px', height: '27px' }} 
           />
