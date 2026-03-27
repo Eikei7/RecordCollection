@@ -76,9 +76,13 @@ function SpineModal({ album, onClose, onRemove, bgColor }) {
   );
 }
 
+const SPINE_WIDTH = 19;
+
 export default function SpineView({ collection, onRemove }) {
   const [selectedAlbum, setSelectedAlbum] = useState(null);
   const [colors, setColors] = useState({});
+  const [itemsPerRow, setItemsPerRow] = useState(20);
+  const containerRef = useRef(null);
 
   useEffect(() => {
     collection.forEach(album => {
@@ -89,15 +93,6 @@ export default function SpineView({ collection, onRemove }) {
       }
     });
   }, [collection]);
-
-  if (collection.length === 0) return <p className="description">Collection is empty.</p>;
-
-  const selectedColor = selectedAlbum ? (colors[selectedAlbum.mbid] || '#415A77') : '#415A77';
-
-  const SPINE_WIDTH = 19;
-
-  const [itemsPerRow, setItemsPerRow] = useState(20);
-  const containerRef = useRef(null);
 
   useEffect(() => {
     const measure = () => {
@@ -111,6 +106,10 @@ export default function SpineView({ collection, onRemove }) {
     if (containerRef.current) ro.observe(containerRef.current);
     return () => ro.disconnect();
   }, []);
+
+  if (collection.length === 0) return <p className="description">No albums match your filter.</p>;
+
+  const selectedColor = selectedAlbum ? (colors[selectedAlbum.mbid] || '#415A77') : '#415A77';
 
   const shelves = [];
   for (let i = 0; i < collection.length; i += itemsPerRow) {
