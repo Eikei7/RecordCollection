@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SpineView from './SpineView';
+import AlbumModal from './AlbumModal';
 
 export default function CollectionList({ collection, onRemove, viewMode }) {
+  const [selectedAlbum, setSelectedAlbum] = useState(null);
+
   if (viewMode === 'spine') {
     return <SpineView collection={collection} onRemove={onRemove} />;
   }
@@ -11,20 +14,43 @@ export default function CollectionList({ collection, onRemove, viewMode }) {
   const listClass = viewMode === 'list' ? 'album-list-view' : 'album-grid-view';
 
   return (
-    <div className={`collection-grid ${listClass}`}>
-      {collection.map(album => (
-        <div key={album.mbid} className="album-card-cover-focus">
-          <div className="cover-focus-wrapper">
-            {album.cover_url ? <img src={album.cover_url} alt="cover" className="cover-focus-image" /> : <div className="no-cover cover-focus-image">No Cover</div>}
-            <button onClick={() => onRemove(album.mbid)} className="btn-remove-overlay">&times;</button>
+    <>
+      <div className={`collection-grid ${listClass}`}>
+        {collection.map(album => (
+          <div
+            key={album.mbid}
+            className="album-card-cover-focus"
+            onClick={() => setSelectedAlbum(album)}
+            style={{ cursor: 'pointer' }}
+          >
+            <div className="cover-focus-wrapper">
+              {album.cover_url
+                ? <img src={album.cover_url} alt="cover" className="cover-focus-image" />
+                : <div className="no-cover cover-focus-image">No Cover</div>
+              }
+              <button
+                onClick={(e) => { e.stopPropagation(); onRemove(album.mbid); }}
+                className="btn-remove-overlay"
+              >
+                &times;
+              </button>
+            </div>
+            <div className="cover-focus-details">
+              <p className="album-title">{album.title}</p>
+              <p className="album-meta">{album.primary_type}</p>
+              <p className="album-meta">{album.artist} ({album.release_year})</p>
+            </div>
           </div>
-          <div className="cover-focus-details">
-            <p className="album-title">{album.title}</p>
-            <p className="album-meta">{album.primary_type}</p>
-            <p className="album-meta">{album.artist} ({album.release_year})</p>
-          </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+
+      {selectedAlbum && (
+        <AlbumModal
+          album={selectedAlbum}
+          onClose={() => setSelectedAlbum(null)}
+          onRemove={onRemove}
+        />
+      )}
+    </>
   );
 }

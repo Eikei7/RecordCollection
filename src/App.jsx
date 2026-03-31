@@ -3,6 +3,7 @@ import Search from './components/Search';
 import CollectionList from './components/CollectionList';
 import CollectionControls from './components/CollectionControls';
 import ExportImportControls from './components/ExportImportControls';
+import { ToastContainer, toast } from 'react-toastify';
 
 const API_BASE_URL = 'https://musicbrainz.org/ws/2';
 
@@ -79,14 +80,17 @@ export default function App() {
   };
 
   const addToCollection = (album) => {
-    if (!collection.find(a => a.mbid === album.mbid)) {
-      setCollection([...collection, album]);
-    }
-  };
+  if (!collection.find(a => a.mbid === album.mbid)) {
+    setCollection([...collection, album]);
+    toast.success(`"${album.title}" added to collection`);
+  }
+};
 
   const removeAlbum = (mbid) => {
-    setCollection(collection.filter(a => a.mbid !== mbid));
-  };
+  const album = collection.find(a => a.mbid === mbid);
+  setCollection(collection.filter(a => a.mbid !== mbid));
+  if (album) toast.error(`"${album.title}" removed from collection`);
+};
 
   const clearSearchResults = () => {
   setSearchResults([]);
@@ -115,7 +119,7 @@ export default function App() {
       <h1 className="header-title">My record collection</h1>
       
       <p className="description">Search and add your music - no account needed, everything saves inside your browser.</p>
-      <p className="description-build">Built using React and <a href="https://musicbrainz.org/doc/Development/XML_Web_Service/Version_2" target="_blank" rel="noopener noreferrer">MusicBrainz API</a>.</p>
+      <p className="description-build">Powered by <a href="https://musicbrainz.org/doc/Development/XML_Web_Service/Version_2" target="_blank" rel="noopener noreferrer">MusicBrainz API</a>.</p>
       
       <section className="search-section">
         <Search onSearch={handleSearch} isLoading={isLoading} />
@@ -171,6 +175,13 @@ export default function App() {
 </section>
       
       <footer className="credits">Made by <a href="https://frontend-erik.se" target="_blank" rel="noopener noreferrer">Erik Karlsson</a></footer>
+      <ToastContainer
+      position="bottom-center"
+      autoClose={2500}
+      hideProgressBar={false}
+      closeOnClick
+      pauseOnHover
+    />
     </div>
   );
 }
