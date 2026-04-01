@@ -119,7 +119,7 @@ export default function App() {
       <h1 className="header-title">My record collection</h1>
       
       <p className="description">Search and add your music - no account needed, everything saves inside your browser.</p>
-      <p className="description-build">Powered by <a href="https://musicbrainz.org/doc/Development/XML_Web_Service/Version_2" target="_blank" rel="noopener noreferrer">MusicBrainz API</a>.</p>
+      <p className="description-build">Powered by <a href="https://musicbrainz.org/doc/Development/XML_Web_Service/Version_2" target="_blank" rel="noopener noreferrer">MusicBrainz API</a> and <a href="https://www.last.fm/api" target="_blank" rel="noopener noreferrer">Last.fm API</a>.</p>
       
       <section className="search-section">
         <Search onSearch={handleSearch} isLoading={isLoading} />
