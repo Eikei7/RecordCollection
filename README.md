@@ -5,6 +5,7 @@ A sleek, browser-based music collection manager built with **React** and the **M
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
 ![API](https://img.shields.io/badge/MusicBrainz-API-orange)
+![API](https://img.shields.io/badge/LastFM-API-orange)
 
 ## Features
 
