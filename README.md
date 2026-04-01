@@ -13,7 +13,7 @@ A sleek, browser-based music collection manager built with **React** and the **M
 - **Smart Collection Management:**
   - Add/remove albums with a single click.
   - Persistent storage: Your collection is saved locally in your browser.
-  - View modes: Switch between a visual **Grid** and a clean **List** view.
+  - View modes: Switch between a visual **Grid**, a clean **List** view and spines on a bookshelf.
 - **Advanced Sorting & Filtering:**
   - Sort by release year (newest/oldest) or title (A-Z/Z-A).
   - Real-time filtering by artist name.
