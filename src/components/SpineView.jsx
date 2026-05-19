@@ -1,23 +1,26 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, memo } from 'react';
 
-function getDominantColor(imgUrl, callback) {
-  const img = new Image();
-  img.crossOrigin = 'Anonymous';
-  img.onload = () => {
-    const canvas = document.createElement('canvas');
-    canvas.width = img.width;
-    canvas.height = img.height;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0);
-    const data = ctx.getImageData(0, 0, img.width, img.height).data;
-    let r = 0, g = 0, b = 0, count = 0;
-    for (let i = 0; i < data.length; i += 16) {
-      r += data[i]; g += data[i+1]; b += data[i+2]; count++;
-    }
-    callback(`rgb(${Math.round(r/count)},${Math.round(g/count)},${Math.round(b/count)})`);
-  };
-  img.onerror = () => callback(null);
-  img.src = imgUrl;
+// Sample a tiny 10×10 canvas instead of full-resolution — much faster.
+function getDominantColor(imgUrl) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 10;
+      canvas.height = 10;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, 10, 10);
+      const data = ctx.getImageData(0, 0, 10, 10).data;
+      let r = 0, g = 0, b = 0, count = 0;
+      for (let i = 0; i < data.length; i += 4) {
+        r += data[i]; g += data[i + 1]; b += data[i + 2]; count++;
+      }
+      resolve(`rgb(${Math.round(r / count)},${Math.round(g / count)},${Math.round(b / count)})`);
+    };
+    img.onerror = () => resolve(null);
+    img.src = imgUrl;
+  });
 }
 
 function luminance(rgb) {
@@ -27,7 +30,8 @@ function luminance(rgb) {
   return 0.299 * r + 0.587 * g + 0.114 * b;
 }
 
-function SpineItem({ album, onClick, bgColor }) {
+// memo prevents re-render when sibling album colors load
+const SpineItem = memo(function SpineItem({ album, onClick, bgColor }) {
   const textColor = luminance(bgColor) > 140 ? '#111' : '#f3f3f2';
 
   return (
@@ -39,7 +43,7 @@ function SpineItem({ album, onClick, bgColor }) {
       <span className="spine-text">{album.artist} — {album.title}</span>
     </div>
   );
-}
+});
 
 function SpineModal({ album, onClose, onRemove, bgColor }) {
   const handleBackdrop = (e) => {
@@ -83,13 +87,29 @@ export default function SpineView({ collection, onRemove }) {
   const [colors, setColors] = useState({});
   const [itemsPerRow, setItemsPerRow] = useState(20);
   const containerRef = useRef(null);
+  // Track which mbids have already been requested to avoid duplicate fetches
+  // and to prevent stale-closure issues with the colors state.
+  const processedRef = useRef(new Set());
 
   useEffect(() => {
-    collection.forEach(album => {
-      if (album.cover_url && !colors[album.mbid]) {
-        getDominantColor(album.cover_url, (color) => {
-          if (color) setColors(prev => ({ ...prev, [album.mbid]: color }));
-        });
+    const missing = collection.filter(
+      album => album.cover_url && !processedRef.current.has(album.mbid)
+    );
+    if (missing.length === 0) return;
+
+    // Mark as in-flight before any async work
+    missing.forEach(album => processedRef.current.add(album.mbid));
+
+    // Load all missing covers in parallel, then do a single setState
+    Promise.all(
+      missing.map(album =>
+        getDominantColor(album.cover_url).then(color => ({ mbid: album.mbid, color }))
+      )
+    ).then(results => {
+      const updates = {};
+      results.forEach(({ mbid, color }) => { if (color) updates[mbid] = color; });
+      if (Object.keys(updates).length > 0) {
+        setColors(prev => ({ ...prev, ...updates }));
       }
     });
   }, [collection]);
@@ -107,14 +127,19 @@ export default function SpineView({ collection, onRemove }) {
     return () => ro.disconnect();
   }, []);
 
+  // Memoize shelf layout so it only recalculates when collection or width changes
+  const shelves = useMemo(() => {
+    const result = [];
+    for (let i = 0; i < collection.length; i += itemsPerRow) {
+      result.push(collection.slice(i, i + itemsPerRow));
+    }
+    return result;
+  }, [collection, itemsPerRow]);
+
+  // Early return must come after all hooks
   if (collection.length === 0) return <p className="description">No albums match your filter.</p>;
 
   const selectedColor = selectedAlbum ? (colors[selectedAlbum.mbid] || '#415A77') : '#415A77';
-
-  const shelves = [];
-  for (let i = 0; i < collection.length; i += itemsPerRow) {
-    shelves.push(collection.slice(i, i + itemsPerRow));
-  }
 
   return (
     <>
