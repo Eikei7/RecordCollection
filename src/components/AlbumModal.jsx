@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import CoverImage from './CoverImage';
 
 const API_BASE_URL = 'https://musicbrainz.org/ws/2';
 const LASTFM_API_URL = 'https://ws.audioscrobbler.com/2.0/';
@@ -31,7 +32,7 @@ export default function AlbumModal({ album, onClose, onRemove }) {
         const lfmData = await lfmRes.json();
         setDetails(mbData);
         setLastfm(lfmData.album || null);
-      } catch (e) {
+      } catch {
         setDetails(null);
         setLastfm(null);
       } finally {
@@ -62,10 +63,12 @@ export default function AlbumModal({ album, onClose, onRemove }) {
 
         <div className="album-modal-top">
           <div className="album-modal-cover-wrap">
-            {album.cover_url
-              ? <img src={album.cover_url} alt="cover" className="album-modal-cover" />
-              : <div className="album-modal-no-cover">No Cover</div>
-            }
+            <CoverImage
+              src={album.cover_url}
+              mbid={album.mbid}
+              className="album-modal-cover"
+              noCoverClassName="album-modal-no-cover"
+            />
           </div>
           <div className="album-modal-header">
             <p className="album-modal-title">{album.title}</p>

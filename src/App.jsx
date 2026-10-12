@@ -3,6 +3,7 @@ import Search from './components/Search';
 import CollectionList from './components/CollectionList';
 import CollectionControls from './components/CollectionControls';
 import ExportImportControls from './components/ExportImportControls';
+import CoverImage from './components/CoverImage';
 import { ToastContainer, toast } from 'react-toastify';
 
 const API_BASE_URL = 'https://musicbrainz.org/ws/2';
@@ -23,18 +24,9 @@ export default function App() {
     localStorage.setItem('my_record_collection', JSON.stringify(collection));
   }, [collection]);
 
-  const getCoverArtUrl = async (mbid) => {
-    try {
-      const response = await fetch(`https://coverartarchive.org/release-group/${mbid}`);
-      if (response.ok) {
-        const data = await response.json();
-        return data.images[0]?.thumbnails?.['250'] || data.images[0]?.image;
-      }
-    } catch (e) {
-      return null;
-    }
-    return null;
-  };
+  const getCoverArtUrl = (mbid) => (
+    `https://coverartarchive.org/release-group/${mbid}/front-250`
+  );
 
   const handleSearch = async (query) => {
     if (!query) return;
@@ -56,8 +48,8 @@ export default function App() {
             ['Album', 'EP', 'Single'].includes(g['primary-type'])
           );
 
-          const formatted = await Promise.all(filtered.map(async (group) => {
-            const coverUrl = await getCoverArtUrl(group.id);
+          const formatted = filtered.map((group) => {
+            const coverUrl = getCoverArtUrl(group.id);
             return {
               mbid: group.id,
               title: group.title,
@@ -66,13 +58,13 @@ export default function App() {
               cover_url: coverUrl,
               primary_type: group['primary-type'] || 'Album'
             };
-          }));
+          });
           setSearchResults(formatted);
         }
       } else {
         setError(`No artist found for "${query}".`);
       }
-    } catch (err) {
+    } catch {
       setError('API Error. Please try again.');
     } finally {
       setIsLoading(false);
@@ -135,11 +127,7 @@ export default function App() {
           {searchResults.map(album => (
             <div key={album.mbid} className="card">
               <div className="cover-wrapper">
-                {album.cover_url ? (
-                  <img src={album.cover_url} alt="cover" className="cover-image" />
-                ) : (
-                  <div className="no-cover">No Cover</div>
-                )}
+                <CoverImage src={album.cover_url} mbid={album.mbid} className="cover-image" />
               </div>
               <div className="album-details">
                 <p>{album.title}</p>

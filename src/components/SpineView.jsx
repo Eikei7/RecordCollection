@@ -1,27 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo, memo } from 'react';
-
-// Sample a tiny 10×10 canvas instead of full-resolution — much faster.
-function getDominantColor(imgUrl) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.crossOrigin = 'Anonymous';
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = 10;
-      canvas.height = 10;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, 10, 10);
-      const data = ctx.getImageData(0, 0, 10, 10).data;
-      let r = 0, g = 0, b = 0, count = 0;
-      for (let i = 0; i < data.length; i += 4) {
-        r += data[i]; g += data[i + 1]; b += data[i + 2]; count++;
-      }
-      resolve(`rgb(${Math.round(r / count)},${Math.round(g / count)},${Math.round(b / count)})`);
-    };
-    img.onerror = () => resolve(null);
-    img.src = imgUrl;
-  });
-}
+import CoverImage from './CoverImage';
 
 function luminance(rgb) {
   const match = rgb.match(/\d+/g);
@@ -60,10 +38,12 @@ function SpineModal({ album, onClose, onRemove, bgColor }) {
     <div className="spine-modal-backdrop" onClick={handleBackdrop}>
       <div className="spine-modal">
         <button className="spine-modal-close" onClick={onClose} aria-label="Close">&times;</button>
-        {album.cover_url
-          ? <img src={album.cover_url} alt="cover" className="spine-modal-cover" />
-          : <div className="spine-modal-no-cover">No Cover</div>
-        }
+        <CoverImage
+          src={album.cover_url}
+          mbid={album.mbid}
+          className="spine-modal-cover"
+          noCoverClassName="spine-modal-no-cover"
+        />
         <div className="spine-modal-details" style={{ borderTop: `4px solid ${bgColor}` }}>
           <p className="spine-modal-title">{album.title}</p>
           <p className="spine-modal-meta">{album.artist}</p>
@@ -84,35 +64,8 @@ const SPINE_WIDTH = 19;
 
 export default function SpineView({ collection, onRemove }) {
   const [selectedAlbum, setSelectedAlbum] = useState(null);
-  const [colors, setColors] = useState({});
   const [itemsPerRow, setItemsPerRow] = useState(20);
   const containerRef = useRef(null);
-  // Track which mbids have already been requested to avoid duplicate fetches
-  // and to prevent stale-closure issues with the colors state.
-  const processedRef = useRef(new Set());
-
-  useEffect(() => {
-    const missing = collection.filter(
-      album => album.cover_url && !processedRef.current.has(album.mbid)
-    );
-    if (missing.length === 0) return;
-
-    // Mark as in-flight before any async work
-    missing.forEach(album => processedRef.current.add(album.mbid));
-
-    // Load all missing covers in parallel, then do a single setState
-    Promise.all(
-      missing.map(album =>
-        getDominantColor(album.cover_url).then(color => ({ mbid: album.mbid, color }))
-      )
-    ).then(results => {
-      const updates = {};
-      results.forEach(({ mbid, color }) => { if (color) updates[mbid] = color; });
-      if (Object.keys(updates).length > 0) {
-        setColors(prev => ({ ...prev, ...updates }));
-      }
-    });
-  }, [collection]);
 
   useEffect(() => {
     const measure = () => {
@@ -139,7 +92,7 @@ export default function SpineView({ collection, onRemove }) {
   // Early return must come after all hooks
   if (collection.length === 0) return <p className="description">No albums match your filter.</p>;
 
-  const selectedColor = selectedAlbum ? (colors[selectedAlbum.mbid] || '#415A77') : '#415A77';
+  const selectedColor = '#415A77';
 
   return (
     <>
@@ -151,7 +104,7 @@ export default function SpineView({ collection, onRemove }) {
                 <SpineItem
                   key={album.mbid}
                   album={album}
-                  bgColor={colors[album.mbid] || '#415A77'}
+                  bgColor="#415A77"
                   onClick={setSelectedAlbum}
                 />
               ))}

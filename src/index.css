@@ -1,5 +1,3 @@
-/* index.css */
-
 @import url("https://fonts.googleapis.com/css?family=Oswald:200,300,regular,500,600,700");
 @import url("https://fonts.googleapis.com/css?family=Lilex:100,200,300,regular,500,600,700,100italic,200italic,300italic,italic,500italic,600italic,700italic");
 @import url("https://fonts.googleapis.com/css?family=Geom:300,regular,500,600,700,800,900,300italic,italic,500italic,600italic,700italic,800italic,900italic");
@@ -230,7 +228,6 @@ body {
   font-family: Geom;
 }
 
-/* Ny klass från din deployade kod */
 .description-build {
   text-align: center;
   color: #757575;
@@ -259,7 +256,6 @@ body {
   font-family: 'Geom', sans-serif;
 }
 
-/* Knappar */
 .btn {
   font-family: Geom, sans-serif;
   font-weight: 400;
@@ -302,7 +298,6 @@ body {
   opacity: .8;
 }
 
-/* Grids och Responsivitet */
 .results-grid, .collection-grid {
   display: grid;
   gap: 1rem;
@@ -396,7 +391,6 @@ body {
   transition: background-color .2s, transform .2s;
 }
 
-/* Sökresultat-kort (.card) */
 .card {
   border: 1px solid #eee;
   padding: .75rem;
@@ -458,6 +452,19 @@ body {
   gap: .5rem;
 
  }
+
+.collection-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.collection-pagination-status {
+  color: #4b5563;
+  font-size: .875rem;
+}
 
 .album-list-view .album-card-cover-focus {
     display: flex;
